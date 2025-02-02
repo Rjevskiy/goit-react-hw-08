@@ -1,38 +1,42 @@
-import { setUser, logout } from './authSlice';
+// redux/auth/authOperations.js
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-export const login = (email, password) => async (dispatch) => {
-  const response = await fetch('https://connections-api.goit.global/users/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  });
+axios.defaults.baseURL = 'https://connections-api.goit.global/';  
 
-  if (response.ok) {
-    const data = await response.json();
-    dispatch(setUser({ user: data.user, token: data.token }));
-    localStorage.setItem('token', data.token);
-  } else {
-    // Обробка помилок
+// Операция для регистрации
+export const registerUser = createAsyncThunk(
+  'auth/register',
+  async (userData, thunkAPI) => {
+    try {
+      // Отправляем запрос на регистрацию с полями name, email, password
+      const response = await axios.post('users/signup', {
+        name: userData.name,        // Поле name
+        email: userData.email,      // Поле email
+        password: userData.password // Поле password
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response ? error.response.data : error.message);  // Обработка ошибки
+    }
   }
-};
+);
 
-export const register = (email, password, name) => async (dispatch) => {
-  const response = await fetch('https://connections-api.goit.global/users/signup', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, name }),
-  });
-
-  if (response.ok) {
-    const data = await response.json();
-    dispatch(setUser({ user: data.user, token: data.token }));
-    localStorage.setItem('token', data.token);
-  } else {
-    // Обробка помилок
+// redux/auth/authOperations.js
+export const loginUser = createAsyncThunk(
+  'auth/login',
+  async (credentials, thunkAPI) => {
+    try {
+      // Отправляем запрос на логин с полями email и password
+      const response = await axios.post('users/login', {
+        email: credentials.email,  // Поле email
+        password: credentials.password  // Поле password
+      });
+      localStorage.setItem('token', response.data.token); // Сохраняем токен в localStorage
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response ? error.response.data : error.message); // Обработка ошибки
+    }
   }
-};
+);
 
-export const logoutUser = () => (dispatch) => {
-  localStorage.removeItem('token');
-  dispatch(logout());
-};
