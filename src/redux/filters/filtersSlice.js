@@ -1,21 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  name: '',         // Фильтр по имени
+  searchType: 'name', // Тип поиска (по имени или номеру)
+};
+
 const filtersSlice = createSlice({
   name: 'filters',
-  initialState: {
-    name: '', 
-    searchType: 'name', 
-  },
+  initialState,
   reducers: {
-    
     changeFilter(state, action) {
       const { name, value } = action.payload;
-
-      
       if (Object.prototype.hasOwnProperty.call(state, name)) {
         state[name] = value;
       }
-      
     },
   },
 });

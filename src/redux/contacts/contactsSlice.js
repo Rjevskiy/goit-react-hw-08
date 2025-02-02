@@ -1,5 +1,6 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { fetchContacts, addContact, deleteContact } from './contactsOps';
+// redux/contacts/contactsSlice.js
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchContacts, addContact, deleteContact } from './contactsOperations';
 
 const initialState = {
   items: [],
@@ -12,17 +13,14 @@ const contactsSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
-      
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload;
       })
-      
       .addCase(addContact.fulfilled, (state, action) => {
         state.loading = false;
         state.items.push(action.payload);
       })
-      
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.loading = false;
         state.items = state.items.filter(
@@ -31,7 +29,6 @@ const contactsSlice = createSlice({
       });
 
     builder
-      
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
         (state) => {
@@ -49,24 +46,4 @@ const contactsSlice = createSlice({
   },
 });
 
-
-const selectContacts = (state) => state.contacts.items;
-
-
-const selectFilters = (state) => state.filters;
-
-
-export const selectFilteredContacts = createSelector(
-  [selectContacts, selectFilters],
-  (contacts, { name, searchType }) => {
-    return contacts.filter((contact) => {
-      const valueToSearch =
-        searchType === 'name' ? contact.name : contact.number;
-      return valueToSearch.toLowerCase().includes(name.toLowerCase());
-    });
-  }
-);
-
 export default contactsSlice.reducer;
-
-

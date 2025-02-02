@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import contactsReducer from './contactsSlice';
 import filtersReducer from './filtersSlice';
+import authReducer from './auth/authSlice';  // Импортируем редуктор для аутентификации
 
 const store = configureStore({
   reducer: {
     contacts: contactsReducer, 
     filters: filtersReducer,  
+    auth: authReducer,  // Добавляем редуктор аутентификации
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -15,3 +17,6 @@ const store = configureStore({
 });
 
 export default store;
+
+
+
