@@ -2,7 +2,7 @@ import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { addContact } from "../../redux/contactsOps"; 
+import { addContact } from "../../redux/contacts/contactsOperations"; 
 import "./ContactForm.css";
 
 const validationSchema = Yup.object({

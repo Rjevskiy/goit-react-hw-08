@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchContacts } from './redux/contactsOps'; 
+import { fetchContacts } from './redux/contacts/contactsOperations'; 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header/Header'; // Импортируем Header
 import ContactForm from './components/ContactForm/ContactForm';

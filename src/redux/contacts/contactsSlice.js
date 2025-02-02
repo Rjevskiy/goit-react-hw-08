@@ -1,6 +1,7 @@
-// redux/contacts/contactsSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchContacts, addContact, deleteContact } from './contactsOperations';
+import { createSelector } from '@reduxjs/toolkit'; // Импортируем createSelector для создания селектора
 
 const initialState = {
   items: [],
@@ -46,4 +47,19 @@ const contactsSlice = createSlice({
   },
 });
 
+// Селектор для фильтрации контактов
+export const selectFilteredContacts = createSelector(
+  [(state) => state.contacts.items, (state) => state.filters],
+  (contacts, { name, searchType }) => {
+    return contacts.filter((contact) => {
+      const valueToSearch =
+        searchType === 'name' ? contact.name : contact.number;
+      return valueToSearch.toLowerCase().includes(name.toLowerCase());
+    });
+  }
+);
+
 export default contactsSlice.reducer;
+
+
+
