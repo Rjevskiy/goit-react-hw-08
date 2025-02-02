@@ -15,17 +15,13 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Проверка на пустые поля
     if (!userData.name || !userData.email || !userData.password) {
       setError('All fields are required');
       return;
     }
 
-    // Очистка предыдущих ошибок перед отправкой
-    setError('');
-
     dispatch(registerUser(userData))
-      .catch((err) => setError('Registration failed. Please try again.'));
+      .catch((err) => setError(err.message));
   };
 
   return (
@@ -33,12 +29,12 @@ const Register = () => {
       <input
         type="text"
         name="name"
-        placeholder="Full Name"
+        placeholder="Name"
         value={userData.name}
         onChange={handleChange}
       />
       <input
-        type="text"
+        type="email"
         name="email"
         placeholder="Email"
         value={userData.email}
@@ -58,6 +54,7 @@ const Register = () => {
 };
 
 export default Register;
+
 
 
 

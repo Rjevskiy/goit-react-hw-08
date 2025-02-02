@@ -2,58 +2,64 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-axios.defaults.baseURL = "https://connections-api.goit.global"; // Используем новый бекенд
+axios.defaults.baseURL = "https://connections-api.goit.global/";
 
-// Получить все контакты
+// Получение токена из localStorage
+const getToken = () => {
+  return localStorage.getItem('token');
+};
+
+// Добавление токена в заголовки
+const setAuthHeader = () => {
+  const token = getToken();
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers.common['Authorization'];
+  }
+};
+
+// Операция для получения контактов
 export const fetchContacts = createAsyncThunk(
   "contacts/fetchAll",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("/contacts"); // Получение всех контактов
+      setAuthHeader();  // Устанавливаем заголовок авторизации
+      const response = await axios.get("/contacts");
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response ? error.response.data : error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-// Добавить новый контакт
+// Операция для добавления контакта
 export const addContact = createAsyncThunk(
   "contacts/addContact",
   async (contact, thunkAPI) => {
     try {
-      const response = await axios.post("/contacts", contact); // Создание нового контакта
+      setAuthHeader();  // Устанавливаем заголовок авторизации
+      const response = await axios.post("/contacts", contact);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response ? error.response.data : error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-// Удалить контакт
+// Операция для удаления контакта
 export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
   async (contactId, thunkAPI) => {
     try {
-      await axios.delete(`/contacts/${contactId}`); // Удаление контакта
-      return contactId; // Возвращаем id удаленного контакта
+      setAuthHeader();  // Устанавливаем заголовок авторизации
+      await axios.delete(`/contacts/${contactId}`);
+      return contactId;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response ? error.response.data : error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-// Обновить контакт
-export const updateContact = createAsyncThunk(
-  "contacts/updateContact",
-  async ({ contactId, updatedData }, thunkAPI) => {
-    try {
-      const response = await axios.patch(`/contacts/${contactId}`, updatedData); // Обновление контакта
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response ? error.response.data : error.message);
-    }
-  }
-);
 
 
