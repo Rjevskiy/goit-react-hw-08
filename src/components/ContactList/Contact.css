@@ -1,0 +1,25 @@
+.contact {
+
+    display: flex;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 20px;
+    gap: 10px;
+    align-items: baseline;
+    align-items: center;
+    
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+}
+
+.contactLi {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
