@@ -1,14 +1,32 @@
-
 import { createSlice } from '@reduxjs/toolkit';
+import { createSelector } from 'reselect';  // Импортируем createSelector из reselect
 import { fetchContacts, addContact, deleteContact } from './contactsOperations';
-import { createSelector } from '@reduxjs/toolkit'; // Импортируем createSelector для создания селектора
 
+// Ініціалізація стану
 const initialState = {
   items: [],
   loading: false,
   error: null,
 };
 
+// Селекторы
+const selectContacts = (state) => state.contacts.items;
+const selectFilters = (state) => state.filters;
+
+// Селектор для фильтрации контактов
+export const selectFilteredContacts = createSelector(
+  [selectContacts, selectFilters],
+  (contacts, { name, searchType }) => {
+    if (!contacts || contacts.length === 0 || !name) return contacts;
+
+    return contacts.filter((contact) => {
+      const valueToSearch = searchType === 'name' ? contact.name : contact.number;
+      return valueToSearch?.toLowerCase().includes(name.toLowerCase());
+    });
+  }
+);
+
+// Slice для работы с контактами
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
@@ -47,19 +65,6 @@ const contactsSlice = createSlice({
   },
 });
 
-// Селектор для фильтрации контактов
-export const selectFilteredContacts = createSelector(
-  [(state) => state.contacts.items, (state) => state.filters],
-  (contacts, { name, searchType }) => {
-    return contacts.filter((contact) => {
-      const valueToSearch =
-        searchType === 'name' ? contact.name : contact.number;
-      return valueToSearch.toLowerCase().includes(name.toLowerCase());
-    });
-  }
-);
-
 export default contactsSlice.reducer;
-
 
 

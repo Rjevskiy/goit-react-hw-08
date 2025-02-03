@@ -31,6 +31,7 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
+        state.loading = false;
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
@@ -43,7 +44,7 @@ const authSlice = createSlice({
         (action) => action.type.endsWith('/rejected'),
         (state, action) => {
           state.loading = false;
-          state.error = action.payload;
+          state.error = action.payload || 'Произошла ошибка';
         }
       );
   },

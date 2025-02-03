@@ -10,11 +10,19 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await axios.post('/users/signup', userData);
       const { token } = response.data;
+
+      // Сохраняем токен и устанавливаем заголовок
       localStorage.setItem('token', token);
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+      const errorMessage = error.response?.data?.message || error.message;
+      if (errorMessage.includes('User') || errorMessage.includes('exists')) {
+        return thunkAPI.rejectWithValue('Пользователь уже зарегистрирован');
+      }
+
+      return thunkAPI.rejectWithValue(errorMessage);
     }
   }
 );
@@ -26,11 +34,14 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await axios.post('/users/login', credentials);
       const { token } = response.data;
+
       localStorage.setItem('token', token);
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+      const errorMessage = error.response?.data?.message || error.message;
+      return thunkAPI.rejectWithValue(errorMessage);
     }
   }
 );
@@ -41,7 +52,10 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
     await axios.post('/users/logout');
     localStorage.removeItem('token');
     delete axios.defaults.headers.common.Authorization;
+
+    return null;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+    const errorMessage = error.response?.data?.message || error.message;
+    return thunkAPI.rejectWithValue(errorMessage);
   }
 });

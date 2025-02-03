@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Planer = () => {
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState('');
-  const [time, setTime] = useState('');
   
+  // Загрузка задач из localStorage при монтировании компонента
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    setTasks(savedTasks);
+  }, []);
+
+  // Сохранение задач в localStorage при изменении списка задач
+  useEffect(() => {
+    if (tasks.length > 0) {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+  }, [tasks]);
+
   // Функция для добавления задачи
   const addTask = (e) => {
     e.preventDefault();
-    if (task ) {
-      setTasks([...tasks, { task,  }]);
+    if (task) {
+      setTasks([...tasks, { task }]);
       setTask('');
-
+      
     }
   };
 
@@ -23,7 +35,7 @@ const Planer = () => {
 
   return (
     <div>
-      <h2>Планировщик задач</h2>
+      <h2>Планировщик завдань</h2>
       <form onSubmit={addTask}>
         <label>
           Задача:
@@ -31,22 +43,24 @@ const Planer = () => {
             type="text"
             value={task}
             onChange={(e) => setTask(e.target.value)}
-            placeholder="Введите задачу"
+            placeholder="Введiть задачу"
           />
         </label>
         
-        <button type="submit">Добавить задачу</button>
+        
+        
+        <button type="submit">Додати задачу</button>
       </form>
 
-      <h3>Список задач</h3>
+      <h3>Список завдань</h3>
       {tasks.length === 0 ? (
         <p>Задач нет</p>
       ) : (
         <ul>
           {tasks.map((taskItem, index) => (
-            <li key={index}>
+            <li className='planerLi' key={index}>
               <p>{taskItem.task} - {taskItem.time}</p>
-              <button onClick={() => deleteTask(index)}>Удалить</button>
+              <button className='buttonLi' onClick={() => deleteTask(index)}>Видалити</button>
             </li>
           ))}
         </ul>
@@ -56,3 +70,4 @@ const Planer = () => {
 };
 
 export default Planer;
+

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../redux/auth/authOperations';
+import { registerUser, loginUser } from '../redux/auth/authOperations';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -11,17 +11,24 @@ const Register = () => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!userData.name || !userData.email || !userData.password) {
-      setError('All fields are required');
+      setError('Заполните все поля');
       return;
     }
 
-    dispatch(registerUser(userData))
-      .unwrap()
-      .catch((err) => setError(err));
+    try {
+      await dispatch(registerUser(userData)).unwrap();
+
+      // После успешной регистрации сразу логиним пользователя
+      await dispatch(loginUser({ email: userData.email, password: userData.password })).unwrap();
+      
+      setError('');
+    } catch (err) {
+      setError(err || 'Ошибка регистрации');
+    }
   };
 
   return (
@@ -29,7 +36,7 @@ const Register = () => {
       <input
         type="text"
         name="name"
-        placeholder="Name"
+        placeholder="Имя"
         value={userData.name}
         onChange={handleChange}
       />
@@ -43,17 +50,18 @@ const Register = () => {
       <input
         type="password"
         name="password"
-        placeholder="Password"
+        placeholder="Пароль"
         value={userData.password}
         onChange={handleChange}
       />
       {error && <div style={{ color: 'red' }}>{error}</div>}
-      <button type="submit">Register</button>
+      <button type="submit">Зарегистрироваться</button>
     </form>
   );
 };
 
 export default Register;
+
 
 
 
