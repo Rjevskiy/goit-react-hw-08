@@ -1,4 +1,3 @@
-// pages/Register.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../redux/auth/authOperations';
@@ -21,7 +20,8 @@ const Register = () => {
     }
 
     dispatch(registerUser(userData))
-      .catch((err) => setError(err.message));
+      .unwrap()
+      .catch((err) => setError(err));
   };
 
   return (

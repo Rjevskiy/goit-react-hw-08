@@ -1,11 +1,10 @@
-// redux/auth/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, loginUser } from './authOperations';  // Операции для регистрации и входа
+import { registerUser, loginUser, logoutUser } from './authOperations';
 
 const initialState = {
-  user: null,  // Данные пользователя
-  token: null,  // Токен аутентификации
-  isAuthenticated: false,  // Статус авторизации
+  user: null,
+  token: null,
+  isAuthenticated: false,
   loading: false,
   error: null,
 };
@@ -13,13 +12,7 @@ const initialState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    logout(state) {
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = false;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
@@ -33,6 +26,11 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
@@ -51,6 +49,4 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
 export default authSlice.reducer;
-

@@ -1,11 +1,10 @@
-// pages/Login.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../redux/auth/authOperations';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
@@ -15,22 +14,23 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!credentials.username || !credentials.password) {
+    if (!credentials.email || !credentials.password) {
       setError('Both fields are required');
       return;
     }
 
     dispatch(loginUser(credentials))
-      .catch((err) => setError(err.message));
+      .unwrap()
+      .catch((err) => setError(err));
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={credentials.username}
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={credentials.email}
         onChange={handleChange}
       />
       <input
