@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutUser } from '../../redux/auth/authOperations'; // Исправленный путь
+import { logoutUser } from '../../redux/auth/operations'; // Исправленный путь
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {

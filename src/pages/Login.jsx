@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../redux/auth/authOperations';
+import { loginUser } from '../redux/auth/operations';
 
 const Login = () => {
   const dispatch = useDispatch();
