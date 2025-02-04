@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutUser } from '../../redux/auth/operations'; // Исправленный путь
+import { logoutUser } from '../../redux/auth/operations'; 
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Проверка авторизации
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); 
 
   const handleLogout = async () => {
     try {
-      await dispatch(logoutUser()); // Ожидаем завершения операции выхода
-      navigate('/login'); // Перенаправление на страницу логина после выхода
+      await dispatch(logoutUser()); 
+      navigate('/login'); 
     } catch (error) {
       console.error(' Ошибка выхода:', error);
     }
@@ -36,11 +36,11 @@ const Header = () => {
             <Link to="/contacts">Контакти</Link>
           </li>
           <li>
-            <Link to="/planer">Планувальник</Link> {/* Линк на страницу планировщика */}
+            <Link to="/planer">Планувальник</Link> 
           </li>  
         </ul>
       </nav>
-      {/* Кнопка "Вийти" появляется только если пользователь авторизован */}
+      
       {isAuthenticated && (<button onClick={handleLogout}>Вийти</button>)}
     </header>
   );

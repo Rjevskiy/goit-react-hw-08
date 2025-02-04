@@ -1,5 +1,5 @@
 
-import { changeFilter } from './filtersSlice'; // Импортируем экшен из filtersSlice
+import { changeFilter } from './filtersSlice';
 
-export { changeFilter }; // Экспортируем экшен
+export { changeFilter }; 
 

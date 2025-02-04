@@ -4,20 +4,20 @@ const Planer = () => {
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState('');
   
-  // Загрузка задач из localStorage при монтировании компонента
+  
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
     setTasks(savedTasks);
   }, []);
 
-  // Сохранение задач в localStorage при изменении списка задач
+  
   useEffect(() => {
     if (tasks.length > 0) {
       localStorage.setItem('tasks', JSON.stringify(tasks));
     }
   }, [tasks]);
 
-  // Функция для добавления задачи
+  
   const addTask = (e) => {
     e.preventDefault();
     if (task) {
@@ -27,7 +27,7 @@ const Planer = () => {
     }
   };
 
-  // Функция для удаления задачи
+  
   const deleteTask = (index) => {
     const newTasks = tasks.filter((_, i) => i !== index);
     setTasks(newTasks);

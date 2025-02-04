@@ -1,16 +1,16 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from './redux/auth/operations'; // Импортируем операцию logout
-import { useNavigate } from 'react-router-dom'; // Для перенаправления
+import { logoutUser } from './redux/auth/operations'; 
+import { useNavigate } from 'react-router-dom'; 
 
 const Logout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logoutUser()) // Выполнение операции выхода
+    dispatch(logoutUser()) 
       .then(() => {
-        navigate('/login'); // Перенаправляем на страницу логина после выхода
+        navigate('/login'); 
       })
       .catch((error) => {
         console.error('Ошибка выхода:', error);

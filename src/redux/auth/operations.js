@@ -3,7 +3,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'https://connections-api.goit.global/';
 
-// Операция для регистрации
+
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (userData, thunkAPI) => {
@@ -11,7 +11,7 @@ export const registerUser = createAsyncThunk(
       const response = await axios.post('/users/signup', userData);
       const { token } = response.data;
 
-      // Сохраняем токен и устанавливаем заголовок
+      
       localStorage.setItem('token', token);
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
@@ -27,7 +27,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Операция для входа
+
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials, thunkAPI) => {
@@ -46,7 +46,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Операция для выхода
+
 export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
     await axios.post('/users/logout');

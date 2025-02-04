@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createSelector } from 'reselect';  // Импортируем createSelector из reselect
-import { fetchContacts, addContact, deleteContact } from './contactsOperations';
+import { createSelector } from 'reselect';  
+import { fetchContacts, addContact, deleteContact } from './operations';
 
-// Ініціалізація стану
+
 const initialState = {
   items: [],
   loading: false,
   error: null,
 };
 
-// Селекторы
+
 const selectContacts = (state) => state.contacts.items;
 const selectFilters = (state) => state.filters;
 
-// Селектор для фильтрации контактов
+
 export const selectFilteredContacts = createSelector(
   [selectContacts, selectFilters],
   (contacts, { name, searchType }) => {
@@ -26,7 +26,7 @@ export const selectFilteredContacts = createSelector(
   }
 );
 
-// Slice для работы с контактами
+
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,

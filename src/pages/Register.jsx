@@ -22,7 +22,7 @@ const Register = () => {
     try {
       await dispatch(registerUser(userData)).unwrap();
 
-      // После успешной регистрации сразу логиним пользователя
+      
       await dispatch(loginUser({ email: userData.email, password: userData.password })).unwrap();
       
       setError('');

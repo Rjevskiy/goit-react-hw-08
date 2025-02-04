@@ -3,12 +3,12 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 axios.defaults.baseURL = "https://connections-api.goit.global/";
 
-// Получение токена из localStorage
+
 const getToken = () => {
   return localStorage.getItem('token');
 };
 
-// Добавление токена в заголовки
+
 const setAuthHeader = () => {
   const token = getToken();
   if (token) {
@@ -18,12 +18,12 @@ const setAuthHeader = () => {
   }
 };
 
-// Операция для получения контактов
+
 export const fetchContacts = createAsyncThunk(
   "contacts/fetchAll",
   async (_, thunkAPI) => {
     try {
-      setAuthHeader();  // Устанавливаем заголовок авторизации
+      setAuthHeader();  
       const response = await axios.get("/contacts");
       return response.data;
     } catch (error) {
@@ -32,12 +32,12 @@ export const fetchContacts = createAsyncThunk(
   }
 );
 
-// Операция для добавления контакта
+
 export const addContact = createAsyncThunk(
   "contacts/addContact",
   async (contact, thunkAPI) => {
     try {
-      setAuthHeader();  // Устанавливаем заголовок авторизации
+      setAuthHeader();  
       const response = await axios.post("/contacts", contact);
       return response.data;
     } catch (error) {
@@ -46,12 +46,12 @@ export const addContact = createAsyncThunk(
   }
 );
 
-// Операция для удаления контакта
+
 export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
   async (contactId, thunkAPI) => {
     try {
-      setAuthHeader();  // Устанавливаем заголовок авторизации
+      setAuthHeader();  
       await axios.delete(`/contacts/${contactId}`);
       return contactId;
     } catch (error) {

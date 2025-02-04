@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  name: '',         // Фильтр по имени
-  searchType: 'name', // Тип поиска (по имени или номеру)
+  name: '',         
+  searchType: 'name', 
 };
 
 const filtersSlice = createSlice({
