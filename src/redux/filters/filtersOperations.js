@@ -1,5 +1,5 @@
 
-import { changeFilter } from './filtersSlice';
+import { changeFilter } from './slice';
 
 export { changeFilter }; 
 
