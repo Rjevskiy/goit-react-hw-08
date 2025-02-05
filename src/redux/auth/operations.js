@@ -1,8 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://connections-api.goit.global/';
-
 // Устанавливаем заголовок авторизации
 const setAuthHeader = (token) => {
   if (token) {
@@ -15,14 +13,19 @@ const clearAuthHeader = () => {
   delete axios.defaults.headers.common.Authorization;
 };
 
+// Функция для получения токена из localStorage
+export const getToken = () => {
+  return localStorage.getItem('token');
+};
+
 // РЕГИСТРАЦИЯ
 export const registerUser = createAsyncThunk('auth/register', async (userData, thunkAPI) => {
   try {
-    const response = await axios.post('/users/signup', userData);
+    const response = await axios.post('https://connections-api.goit.global/users/signup', userData);
     const { token } = response.data;
 
     localStorage.setItem('token', token);
-    setAuthHeader(token); // ✅ Устанавливаем токен
+    setAuthHeader(token); // Устанавливаем токен
 
     return response.data;
   } catch (error) {
@@ -33,11 +36,11 @@ export const registerUser = createAsyncThunk('auth/register', async (userData, t
 // ЛОГИН
 export const loginUser = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
-    const response = await axios.post('/users/login', credentials);
+    const response = await axios.post('https://connections-api.goit.global/users/login', credentials);
     const { token } = response.data;
 
     localStorage.setItem('token', token);
-    setAuthHeader(token); // ✅ Устанавливаем токен
+    setAuthHeader(token); // Устанавливаем токен
 
     return response.data;
   } catch (error) {
@@ -48,10 +51,10 @@ export const loginUser = createAsyncThunk('auth/login', async (credentials, thun
 // ЛОГАУТ
 export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
-    await axios.post('/users/logout');
+    await axios.post('https://connections-api.goit.global/users/logout');
 
     localStorage.removeItem('token');
-    clearAuthHeader(); // ❌ Очищаем токен
+    clearAuthHeader(); // Очищаем токен
 
     return null;
   } catch (error) {
@@ -62,16 +65,16 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
 // ЗАГРУЗКА КОНТАКТОВ
 export const fetchContacts = createAsyncThunk('contacts/fetchAll', async (_, thunkAPI) => {
   const state = thunkAPI.getState();
-  const token = state.auth.token || localStorage.getItem('token'); // ✅ Гарантируем токен
+  const token = state.auth.token || getToken(); // Проверяем токен в state или localStorage
 
   if (!token) {
     return thunkAPI.rejectWithValue('Нет токена, запрос отклонен');
   }
 
-  setAuthHeader(token); // ✅ Устанавливаем заголовок перед запросом
+  setAuthHeader(token); // Устанавливаем заголовок перед запросом
 
   try {
-    const response = await axios.get('/contacts');
+    const response = await axios.get('https://connections-api.goit.global/contacts');
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
