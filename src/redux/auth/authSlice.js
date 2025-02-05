@@ -3,11 +3,12 @@ import { registerUser, loginUser, logoutUser } from './operations';
 
 const initialState = {
   user: null,
-  token: null,
-  isAuthenticated: false,
+  token: localStorage.getItem('token') || null, // Токен уже строка, парсить не нужно
+  isAuthenticated: Boolean(localStorage.getItem('token')), // Проверяем, есть ли токен
   loading: false,
   error: null,
 };
+
 
 const authSlice = createSlice({
   name: 'auth',
@@ -20,18 +21,21 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
+        localStorage.setItem('token', JSON.stringify(action.payload.token)); // Сохраняем токен без лишних кавычек
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
+        localStorage.setItem('token', JSON.stringify(action.payload.token)); // Сохраняем токен без лишних кавычек
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
         state.loading = false;
+        localStorage.removeItem('token'); // Удаляем токен при выходе
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
@@ -51,3 +55,6 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+
+
+

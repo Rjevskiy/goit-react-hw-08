@@ -3,34 +3,34 @@ import React, { useState, useEffect } from 'react';
 const Planer = () => {
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState('');
-  
-  
+
+  // Загружаем задачи из localStorage при монтировании компонента
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    setTasks(savedTasks);
+    const savedTasks = JSON.parse(localStorage.getItem('tasks'));
+    if (savedTasks) {
+      setTasks(savedTasks);
+    }
   }, []);
 
-  
-  useEffect(() => {
-    if (tasks.length > 0) {
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-  }, [tasks]);
-
-  
+  // Функция для добавления новой задачи
   const addTask = (e) => {
     e.preventDefault();
     if (task) {
-      setTasks([...tasks, { task }]);
+      const newTask = { task, time: new Date().toLocaleTimeString() };
+      const updatedTasks = [...tasks, newTask];
+      setTasks(updatedTasks);
+      // Сохраняем обновленный список в localStorage
+      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
       setTask('');
-      
     }
   };
 
-  
+  // Функция для удаления задачи
   const deleteTask = (index) => {
     const newTasks = tasks.filter((_, i) => i !== index);
     setTasks(newTasks);
+    // Сохраняем обновленный список в localStorage после удаления
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
   };
 
   return (
@@ -46,9 +46,6 @@ const Planer = () => {
             placeholder="Введiть задачу"
           />
         </label>
-        
-        
-        
         <button type="submit">Додати задачу</button>
       </form>
 
@@ -58,9 +55,9 @@ const Planer = () => {
       ) : (
         <ul>
           {tasks.map((taskItem, index) => (
-            <li className='planerLi' key={index}>
+            <li className="planerLi" key={index}>
               <p>{taskItem.task} - {taskItem.time}</p>
-              <button className='buttonLi' onClick={() => deleteTask(index)}>Видалити</button>
+              <button className="buttonLi" onClick={() => deleteTask(index)}>Видалити</button>
             </li>
           ))}
         </ul>
@@ -70,4 +67,3 @@ const Planer = () => {
 };
 
 export default Planer;
-
