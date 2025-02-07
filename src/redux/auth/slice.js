@@ -1,10 +1,11 @@
+// authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, loginUser, logoutUser } from './operations';
+import { registerUser, loginUser, logoutUser, fetchUserData } from './operations';
 
 const initialState = {
   user: null,
-  token: localStorage.getItem('token') || null, // Токен уже строка, парсить не нужно
-  isAuthenticated: Boolean(localStorage.getItem('token')), // Проверяем, есть ли токен
+  token: localStorage.getItem('token') || null,
+  isAuthenticated: Boolean(localStorage.getItem('token')),
   loading: false,
   error: null,
 };
@@ -20,21 +21,25 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
-        localStorage.setItem('token', action.payload.token); // Сохраняем токен как строку
+        localStorage.setItem('token', action.payload.token);
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
-        localStorage.setItem('token', action.payload.token); // Сохраняем токен как строку
+        localStorage.setItem('token', action.payload.token);
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
         state.loading = false;
-        localStorage.removeItem('token'); // Удаляем токен при выходе
+        localStorage.removeItem('token');
+      })
+      .addCase(fetchUserData.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
@@ -54,3 +59,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+

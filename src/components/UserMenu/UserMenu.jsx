@@ -1,33 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../redux/auth/operations';
+import { fetchUserData } from '../../redux/auth/operations'; // Пример добавления запроса для пользователя
 
 const UserMenu = () => {
   const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector((state) => state.auth); // Получаем данные пользователя и статус аутентификации
 
-  // Получаем состояние пользователя и флаг загрузки
-  const userName = useSelector((state) => state.auth.user?.name);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isLoading = useSelector((state) => state.auth.isLoading); // добавляем проверку на загрузку
-
-  // Если данные о пользователе всё ещё загружаются, показываем Loading
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // Если пользователь не аутентифицирован, показываем сообщение о необходимости авторизации
-  if (!isAuthenticated) {
-    return <div>Please log in to continue.</div>;
-  }
-
+  useEffect(() => {
+    console.log("isAuthenticated:", isAuthenticated);
+    console.log("user:", user);
+    if (isAuthenticated && !user) {
+      dispatch(fetchUserData()); // Получаем данные пользователя
+    }
+  }, [isAuthenticated, dispatch, user]);
+  
   const handleLogout = () => {
+    console.log("Logging out...");
     dispatch(logoutUser());
   };
 
   return (
     <div>
-      <p>Welcome, {userName}</p>
-      <button onClick={handleLogout}>Logout</button>
+      {isAuthenticated ? (
+        <>
+          <p>Welcome, {user ? user.name : 'Guest'}!</p>
+          <button onClick={handleLogout}>Logout</button>
+        </>
+      ) : (
+        <p>Welcome!</p>
+      )}
     </div>
   );
 };

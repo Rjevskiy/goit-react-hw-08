@@ -1,17 +1,17 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const PrivateRoute = ({ element, ...rest }) => {
+// Компонент PrivateRoute для проверки аутентификации
+const PrivateRoute = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  return (
-    <Route
-      {...rest}
-      element={isAuthenticated ? element : <Navigate to="/login" />}
-    />
-  );
+  if (!isAuthenticated) {
+    // Перенаправляем пользователя на страницу логина, если он не аутентифицирован
+    return <Navigate to="/login" />;
+  }
+
+  return children; // Возвращаем дочерние компоненты, если пользователь аутентифицирован
 };
 
 export default PrivateRoute;
-
