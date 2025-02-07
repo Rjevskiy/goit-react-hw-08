@@ -9,7 +9,6 @@ const initialState = {
   error: null,
 };
 
-
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -21,14 +20,14 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
-        localStorage.setItem('token', JSON.stringify(action.payload.token)); // Сохраняем токен без лишних кавычек
+        localStorage.setItem('token', action.payload.token); // Сохраняем токен как строку
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
-        localStorage.setItem('token', JSON.stringify(action.payload.token)); // Сохраняем токен без лишних кавычек
+        localStorage.setItem('token', action.payload.token); // Сохраняем токен как строку
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
@@ -55,6 +54,3 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-
-
-

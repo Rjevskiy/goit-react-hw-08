@@ -94,7 +94,7 @@ button:focus-visible {
 .navigation{
   display: flex;
   flex-direction: row;
- 
+  
 }
 
 .planerLi{
@@ -104,6 +104,7 @@ button:focus-visible {
   border-radius: 5px;
   padding: 10px;
   gap: 10px;
+  margin-top: 10px;
 }
 
 .buttonLi{
