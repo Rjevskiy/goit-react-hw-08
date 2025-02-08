@@ -3,14 +3,13 @@ import { createSelector } from 'reselect';
 import { fetchContacts, addContact, deleteContact } from './operations';
 
 const initialState = {
-  items: [], 
-  loading: false, 
-  error: null, 
+  items: [],
+  loading: false,
+  error: null,
 };
 
 const selectContacts = (state) => state.contacts.items;
 const selectFilters = (state) => state.filters;
-
 
 export const selectFilteredContacts = createSelector(
   [selectContacts, selectFilters],
@@ -24,7 +23,6 @@ export const selectFilteredContacts = createSelector(
   }
 );
 
-
 const slice = createSlice({
   name: 'contacts',
   initialState,
@@ -37,35 +35,30 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      
       .addCase(fetchContacts.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload; 
+        state.items = action.payload;
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-      
       .addCase(addContact.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(addContact.fulfilled, (state, action) => {
         state.loading = false;
-        state.items.push(action.payload); 
+        state.items.push(action.payload);
       })
       .addCase(addContact.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-      
       .addCase(deleteContact.pending, (state) => {
         state.loading = true;
         state.error = null;

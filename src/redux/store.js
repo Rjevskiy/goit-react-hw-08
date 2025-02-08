@@ -5,11 +5,10 @@ import contactsReducer from './contacts/slice';
 import filtersReducer from './filters/slice';
 import authReducer from './auth/slice';
 
-
 const authPersistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['token'], 
+  whitelist: ['token'],
 };
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
@@ -22,7 +21,7 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, 
+      serializableCheck: false,
     }),
   devTools: process.env.NODE_ENV !== 'production',
 });
