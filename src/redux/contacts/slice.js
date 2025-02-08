@@ -3,15 +3,15 @@ import { createSelector } from 'reselect';
 import { fetchContacts, addContact, deleteContact } from './operations';
 
 const initialState = {
-  items: [], // Список контактов
-  loading: false, // Флаг загрузки
-  error: null, // Ошибки
+  items: [], 
+  loading: false, 
+  error: null, 
 };
 
 const selectContacts = (state) => state.contacts.items;
 const selectFilters = (state) => state.filters;
 
-// 🔍 Селектор для фильтрации контактов по имени или номеру
+
 export const selectFilteredContacts = createSelector(
   [selectContacts, selectFilters],
   (contacts, { name, searchType }) => {
@@ -24,7 +24,7 @@ export const selectFilteredContacts = createSelector(
   }
 );
 
-// 🔹 Создаём slice для управления контактами
+
 const slice = createSlice({
   name: 'contacts',
   initialState,
@@ -37,35 +37,35 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // ✅ ЗАГРУЗКА КОНТАКТОВ
+      
       .addCase(fetchContacts.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload; // Загружаем только контакты текущего пользователя
+        state.items = action.payload; 
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // ✅ ДОБАВЛЕНИЕ КОНТАКТА
+      
       .addCase(addContact.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(addContact.fulfilled, (state, action) => {
         state.loading = false;
-        state.items.push(action.payload); // Добавляем новый контакт
+        state.items.push(action.payload); 
       })
       .addCase(addContact.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // ✅ УДАЛЕНИЕ КОНТАКТА
+      
       .addCase(deleteContact.pending, (state) => {
         state.loading = true;
         state.error = null;
