@@ -6,7 +6,7 @@ const initialState = {
   token: localStorage.getItem('token') || null,
   isAuthenticated: Boolean(localStorage.getItem('token')),
   loading: false,
-  isRefreshing: false, 
+  isRefreshing: false,
   error: null,
 };
 
@@ -38,15 +38,15 @@ const authSlice = createSlice({
         localStorage.removeItem('token');
       })
       .addCase(fetchUserData.pending, (state) => {
-        state.isRefreshing = true; 
+        state.isRefreshing = true;
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isRefreshing = false; 
+        state.isRefreshing = false;
         state.loading = false;
       })
       .addCase(fetchUserData.rejected, (state) => {
-        state.isRefreshing = false; 
+        state.isRefreshing = false;
         state.loading = false;
         state.error = 'Сталася помилка при оновленні даних';
       })

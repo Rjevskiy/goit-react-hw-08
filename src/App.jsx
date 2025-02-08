@@ -16,7 +16,7 @@ import { getToken } from './redux/auth/operations';
 const App = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isRefreshing = useSelector((state) => state.auth.isRefreshing); 
+  const isRefreshing = useSelector((state) => state.auth.isRefreshing);
   const contacts = useSelector((state) => state.contacts.items);
 
   useEffect(() => {
@@ -32,7 +32,6 @@ const App = () => {
     }
   }, [dispatch, isAuthenticated, contacts.length]);
 
-  
   if (isRefreshing) {
     return <div>Завантаження...</div>;
   }
@@ -40,8 +39,6 @@ const App = () => {
   return (
     <div className="app">
       <Layout />
-
-  
       <Routes>
         <Route path="/" element={<h2>Головна сторінка</h2>} />
         <Route
