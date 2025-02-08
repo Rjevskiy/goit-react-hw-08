@@ -1,21 +1,30 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts } from './redux/contacts/operations';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
 import ContactsPage from './pages/ContactsPage';
-import Planer from './pages/Planer';
-import PrivateRoute from './components/Routes/PrivateRoute'; // Для защищенных маршрутов
-import RestrictedRoute from './components/Routes/RestrictedRoute'; // Для ограниченных маршрутов
+import PlanerPage from './pages/Planer';
+import PrivateRoute from './components/Routes/PrivateRoute';
+import RestrictedRoute from './components/Routes/RestrictedRoute';
+import { fetchUserData } from './redux/auth/operations';
+import { fetchContacts } from './redux/contacts/operations';
 import './App.css';
+import { getToken } from './redux/auth/operations';
 
 const App = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isLoading = useSelector((state) => state.contacts.isLoading);
+  const isRefreshing = useSelector((state) => state.auth.isRefreshing); 
   const contacts = useSelector((state) => state.contacts.items);
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      dispatch(fetchUserData());
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     if (isAuthenticated && contacts.length === 0) {
@@ -23,16 +32,18 @@ const App = () => {
     }
   }, [dispatch, isAuthenticated, contacts.length]);
 
+  
+  if (isRefreshing) {
+    return <div>Завантаження...</div>;
+  }
+
   return (
     <div className="app">
       <Layout />
 
-      {isLoading && <div>Загрузка...</div>}
-
+  
       <Routes>
         <Route path="/" element={<h2>Головна сторінка</h2>} />
-        
-        {/* Ограничиваем доступ к страницам регистрации и входа для аутентифицированных пользователей */}
         <Route
           path="/register"
           element={
@@ -49,8 +60,6 @@ const App = () => {
             </RestrictedRoute>
           }
         />
-
-        {/* Защищаем доступ к контактам и планировщику для аутентифицированных пользователей */}
         <Route
           path="/contacts"
           element={
@@ -63,7 +72,7 @@ const App = () => {
           path="/planer"
           element={
             <PrivateRoute>
-              <Planer />
+              <PlanerPage />
             </PrivateRoute>
           }
         />
@@ -73,3 +82,4 @@ const App = () => {
 };
 
 export default App;
+

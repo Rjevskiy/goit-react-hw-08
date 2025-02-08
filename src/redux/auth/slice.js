@@ -1,4 +1,3 @@
-// authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { registerUser, loginUser, logoutUser, fetchUserData } from './operations';
 
@@ -7,6 +6,7 @@ const initialState = {
   token: localStorage.getItem('token') || null,
   isAuthenticated: Boolean(localStorage.getItem('token')),
   loading: false,
+  isRefreshing: false, 
   error: null,
 };
 
@@ -37,9 +37,18 @@ const authSlice = createSlice({
         state.loading = false;
         localStorage.removeItem('token');
       })
+      .addCase(fetchUserData.pending, (state) => {
+        state.isRefreshing = true; 
+      })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isRefreshing = false; 
         state.loading = false;
+      })
+      .addCase(fetchUserData.rejected, (state) => {
+        state.isRefreshing = false; 
+        state.loading = false;
+        state.error = 'Сталася помилка при оновленні даних';
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
@@ -52,11 +61,10 @@ const authSlice = createSlice({
         (action) => action.type.endsWith('/rejected'),
         (state, action) => {
           state.loading = false;
-          state.error = action.payload || 'Произошла ошибка';
+          state.error = action.payload || 'Сталася помилка';
         }
       );
   },
 });
 
 export default authSlice.reducer;
-

@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux';
 const RestrictedRoute = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  // Если пользователь аутентифицирован, перенаправляем его на страницу контактов
+  
   if (isAuthenticated) {
     return <Navigate to="/contacts" />;
   }
 
-  return children; // Если пользователь не аутентифицирован, отображаем дочерние компоненты
+  return children; 
 };
 
 export default RestrictedRoute;

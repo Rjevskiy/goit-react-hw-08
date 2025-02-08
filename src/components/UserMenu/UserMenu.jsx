@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../redux/auth/operations';
-import { fetchUserData } from '../../redux/auth/operations'; // Пример добавления запроса для пользователя
+import { fetchUserData } from '../../redux/auth/operations'; 
 
 const UserMenu = () => {
   const dispatch = useDispatch();
-  const { user, isAuthenticated } = useSelector((state) => state.auth); // Получаем данные пользователя и статус аутентификации
+  const { user, isAuthenticated } = useSelector((state) => state.auth); 
 
   useEffect(() => {
     console.log("isAuthenticated:", isAuthenticated);
     console.log("user:", user);
     if (isAuthenticated && !user) {
-      dispatch(fetchUserData()); // Получаем данные пользователя
+      dispatch(fetchUserData()); 
     }
   }, [isAuthenticated, dispatch, user]);
   
@@ -24,11 +24,11 @@ const UserMenu = () => {
     <div>
       {isAuthenticated ? (
         <>
-          <p>Welcome, {user ? user.name : 'Guest'}!</p>
-          <button onClick={handleLogout}>Logout</button>
+          <p>Раді вас бачити, {user ? user.name : 'Guest'}</p>
+          <button onClick={handleLogout}>Вихід</button>
         </>
       ) : (
-        <p>Welcome!</p>
+        <p>Раді вас бачити</p>
       )}
     </div>
   );

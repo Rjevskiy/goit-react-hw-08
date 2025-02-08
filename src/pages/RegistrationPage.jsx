@@ -1,11 +1,11 @@
 import React from 'react';
-import RegistrationForm from '../components/RegistrationForm/RegistrationForm'; // Импорт компонента формы регистрации
+import RegistrationForm from '../components/RegistrationForm/RegistrationForm'; 
 
 const RegistrationPage = () => {
   return (
     <div>
       <h1>Реєстрація</h1>
-      <RegistrationForm /> {/* Используем компонент формы регистрации */}
+      <RegistrationForm /> 
     </div>
   );
 };

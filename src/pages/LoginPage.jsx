@@ -1,11 +1,11 @@
 import React from 'react';
-import LoginForm from '../components/LoginForm/LoginForm'; // Импорт компонента формы входа
+import LoginForm from '../components/LoginForm/LoginForm'; 
 
 const LoginPage = () => {
   return (
     <div>
       <h1>Вхід</h1>
-      <LoginForm /> {/* Используем компонент формы входа */}
+      <LoginForm /> 
     </div>
   );
 };

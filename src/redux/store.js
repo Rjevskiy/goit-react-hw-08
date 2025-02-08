@@ -5,11 +5,11 @@ import contactsReducer from './contacts/slice';
 import filtersReducer from './filters/slice';
 import authReducer from './auth/slice';
 
-// Конфиг для persist (сохраняем только token, но не user)
+
 const authPersistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['token'], // Храним только токен, чтобы не терять аутентификацию
+  whitelist: ['token'], 
 };
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
@@ -22,7 +22,7 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, // Отключаем проверку сериализации (нужно для persist)
+      serializableCheck: false, 
     }),
   devTools: process.env.NODE_ENV !== 'production',
 });

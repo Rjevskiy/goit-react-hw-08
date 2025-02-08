@@ -4,7 +4,7 @@ const Planer = () => {
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState('');
 
-  // Загружаем задачи из localStorage при монтировании компонента
+  
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem('tasks'));
     if (savedTasks) {
@@ -12,24 +12,24 @@ const Planer = () => {
     }
   }, []);
 
-  // Функция для добавления новой задачи
+  
   const addTask = (e) => {
     e.preventDefault();
     if (task) {
       const newTask = { task, time: new Date().toLocaleTimeString() };
       const updatedTasks = [...tasks, newTask];
       setTasks(updatedTasks);
-      // Сохраняем обновленный список в localStorage
+      
       localStorage.setItem('tasks', JSON.stringify(updatedTasks));
       setTask('');
     }
   };
 
-  // Функция для удаления задачи
+  
   const deleteTask = (index) => {
     const newTasks = tasks.filter((_, i) => i !== index);
     setTasks(newTasks);
-    // Сохраняем обновленный список в localStorage после удаления
+    
     localStorage.setItem('tasks', JSON.stringify(newTasks));
   };
 

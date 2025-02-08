@@ -15,32 +15,32 @@ const RegistrationForm = () => {
     e.preventDefault();
 
     if (!userData.name || !userData.email || !userData.password) {
-      setError('Заполните все поля');
+      setError('Заповніть усі поля');
       return;
     }
 
     try {
-      // Регистрация пользователя
+      
       await dispatch(registerUser(userData)).unwrap();
 
-      // Вход после успешной регистрации
+      
       await dispatch(loginUser({ email: userData.email, password: userData.password })).unwrap();
       
-      setError(''); // Очистка ошибки, если регистрация прошла успешно
+      setError(''); 
     } catch (err) {
-      setError(err.message || 'Ошибка регистрации');
+      setError(err.message || 'Помилка реєстрації');
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="name">Имя:</label>
+        <label htmlFor="name">Ім’я:</label>
         <input
           type="text"
           name="name"
           id="name"
-          placeholder="Имя"
+          placeholder="Ім’я"
           value={userData.name}
           onChange={handleChange}
         />
@@ -68,7 +68,7 @@ const RegistrationForm = () => {
         />
       </div>
       {error && <div style={{ color: 'red' }}>{error}</div>}
-      <button type="submit">Зарегистрироваться</button>
+      <button type="submit">Зареєструватися</button>
     </form>
   );
 };

@@ -13,12 +13,11 @@ const Logout = () => {
         navigate('/login'); 
       })
       .catch((error) => {
-        console.error('Ошибка выхода:', error);
+        console.error('Помилка виходу:', error);
       });
   };
 
-  return <button onClick={handleLogout}>Выйти</button>;
+  return <button onClick={handleLogout}>Вийти</button>;
 };
 
 export default Logout;
-

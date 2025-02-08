@@ -14,13 +14,13 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Проверка, что оба поля заполнены
+    
     if (!credentials.email || !credentials.password) {
       setError('Both fields are required');
       return;
     }
 
-    // Отправка данных для входа
+    
     dispatch(loginUser(credentials))
       .unwrap()
       .catch((err) => setError(err.message || 'Error during login'));
