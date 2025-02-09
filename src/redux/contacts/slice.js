@@ -1,27 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createSelector } from 'reselect';
 import { fetchContacts, addContact, deleteContact } from './operations';
+import { logoutUser } from '../auth/operations';
 
 const initialState = {
   items: [],
   loading: false,
   error: null,
 };
-
-const selectContacts = (state) => state.contacts.items;
-const selectFilters = (state) => state.filters;
-
-export const selectFilteredContacts = createSelector(
-  [selectContacts, selectFilters],
-  (contacts, { name, searchType }) => {
-    if (!contacts || contacts.length === 0 || !name) return contacts;
-
-    return contacts.filter((contact) => {
-      const valueToSearch = searchType === 'name' ? contact.name : contact.number;
-      return valueToSearch?.toLowerCase().includes(name.toLowerCase());
-    });
-  }
-);
 
 const slice = createSlice({
   name: 'contacts',
@@ -72,7 +57,8 @@ const slice = createSlice({
       .addCase(deleteContact.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(logoutUser.fulfilled, () => initialState); // Очистка контактов при выходе пользователя
   },
 });
 

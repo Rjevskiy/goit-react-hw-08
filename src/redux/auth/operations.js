@@ -3,6 +3,9 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'https://connections-api.goit.global/',
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 // Функция для установки заголовка авторизации
@@ -31,7 +34,7 @@ export const registerUser = createAsyncThunk('auth/register', async (userData, t
 
     return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Помилка реєстрації');
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка регистрации');
   }
 });
 
@@ -46,7 +49,7 @@ export const loginUser = createAsyncThunk('auth/login', async (credentials, thun
 
     return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Помилка входу');
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка входа');
   }
 });
 
@@ -63,17 +66,17 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
     thunkAPI.dispatch({ type: 'contacts/resetContacts' });
     return null;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Помилка виходу');
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка выхода');
   }
 });
 
 // Получение данных пользователя
 export const fetchUserData = createAsyncThunk('auth/fetchUserData', async (_, thunkAPI) => {
   const state = thunkAPI.getState();
-  let token = state.auth.token || getToken(); // Получаем токен из состояния или из localStorage.
+  const token = state.auth.token || getToken();
 
   if (!token) {
-    return thunkAPI.rejectWithValue('Немає токена, запит відхилено');
+    return thunkAPI.rejectWithValue('Нет токена, запрос отклонен');
   }
 
   setAuthHeader(token);
@@ -87,6 +90,6 @@ export const fetchUserData = createAsyncThunk('auth/fetchUserData', async (_, th
       localStorage.removeItem('token');
       clearAuthHeader();
     }
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Помилка завантаження даних');
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка загрузки данных');
   }
 });

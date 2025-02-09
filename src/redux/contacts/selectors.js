@@ -5,16 +5,16 @@ const selectFilters = (state) => state.filters;
 
 export const selectFilteredContacts = createSelector(
   [selectContacts, selectFilters],
-  (contacts, { name, searchType }) => {
-    
-    if (!name) return contacts;
-    
+  (contacts, { name = '', searchType = 'name' }) => {
+    if (!contacts || contacts.length === 0) return [];
+
+    const normalizedFilter = name.trim().toLowerCase();
+
     return contacts.filter((contact) => {
       const valueToSearch =
         searchType === 'name' ? contact.name : contact.number;
-      
-      
-      return valueToSearch && valueToSearch.toLowerCase().includes(name.toLowerCase());
+
+      return valueToSearch?.toLowerCase().includes(normalizedFilter);
     });
   }
 );

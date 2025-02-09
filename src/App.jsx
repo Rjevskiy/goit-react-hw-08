@@ -9,7 +9,6 @@ import PlanerPage from './pages/Planer';
 import PrivateRoute from './components/Routes/PrivateRoute';
 import RestrictedRoute from './components/Routes/RestrictedRoute';
 import { fetchUserData } from './redux/auth/operations';
-import { fetchContacts } from './redux/contacts/operations';
 import './App.css';
 import { getToken } from './redux/auth/operations';
 
@@ -17,20 +16,14 @@ const App = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isRefreshing = useSelector((state) => state.auth.isRefreshing);
-  const contacts = useSelector((state) => state.contacts.items);
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const token = getToken();
-    if (token) {
+    if (token && !user && !isRefreshing) { // Проверяем, что данные пользователя еще не получены и что мы не в процессе загрузки
       dispatch(fetchUserData());
     }
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (isAuthenticated && contacts.length === 0) {
-      dispatch(fetchContacts());
-    }
-  }, [dispatch, isAuthenticated, contacts.length]);
+  }, [dispatch, user, isRefreshing]);
 
   if (isRefreshing) {
     return <div>Завантаження...</div>;
