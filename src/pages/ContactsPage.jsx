@@ -7,14 +7,15 @@ import ContactList from "../components/ContactList/ContactList";
 const ContactsPage = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.contacts);
-  const [hasFetched, setHasFetched] = useState(false); // Добавляем флаг для контроля загрузки
+  const { isAuthenticated } = useSelector((state) => state.auth); // Получаем статус аутентификации
+  const [hasFetched, setHasFetched] = useState(false); // Для контроля запросов
 
   useEffect(() => {
-    if (items.length === 0 && !hasFetched) { // Запрос только если список пуст и запрос еще не был сделан
+    if (isAuthenticated && items.length === 0 && !hasFetched) { // Проверка на авторизацию
       dispatch(fetchContacts());
-      setHasFetched(true); // Устанавливаем флаг, что запрос был выполнен
+      setHasFetched(true); // Запрос был сделан
     }
-  }, [dispatch, items.length, hasFetched]); // Добавляем зависимость от hasFetched
+  }, [dispatch, items.length, hasFetched, isAuthenticated]); // Добавили зависимость от isAuthenticated
 
   return (
     <div>

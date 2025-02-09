@@ -58,7 +58,11 @@ const slice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(logoutUser.fulfilled, () => initialState); // Очистка контактов при выходе пользователя
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.items = [];
+        state.loading = false;
+        state.error = null; // Очистка состояния при выходе пользователя
+      });
   },
 });
 
