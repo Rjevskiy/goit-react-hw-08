@@ -20,8 +20,7 @@ const App = () => {
 
   useEffect(() => {
     const token = getToken();
-    if (token && !user && !isRefreshing) { // Проверяем, что данные пользователя еще не получены и что мы не в процессе загрузки
-      dispatch(fetchUserData());
+    if (token && !user && !isRefreshing) { // Проверяем, что данные пользователя еще не получены и что мы не в процессе загрузки);
     }
   }, [dispatch, user, isRefreshing]);
 

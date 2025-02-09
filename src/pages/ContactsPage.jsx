@@ -11,8 +11,7 @@ const ContactsPage = () => {
   const [hasFetched, setHasFetched] = useState(false); // Для контроля запросов
 
   useEffect(() => {
-    if (isAuthenticated && items.length === 0 && !hasFetched) { // Проверка на авторизацию
-      dispatch(fetchContacts());
+    if (isAuthenticated && items.length === 0 && !hasFetched) { // Проверка на авторизацию);
       setHasFetched(true); // Запрос был сделан
     }
   }, [dispatch, items.length, hasFetched, isAuthenticated]); // Добавили зависимость от isAuthenticated
