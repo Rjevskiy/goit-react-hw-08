@@ -25,6 +25,10 @@ const App = () => {
     }
   }, [dispatch, user, isRefreshing]);
 
+  useEffect(() => {
+    console.log('isAuthenticated:', isAuthenticated); 
+  }, [isAuthenticated]); 
+
   if (isRefreshing) {
     return <div>Завантаження...</div>;
   }
