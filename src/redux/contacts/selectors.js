@@ -5,9 +5,10 @@ const selectFilters = (state) => state.filters;
 
 export const selectFilteredContacts = createSelector(
   [selectContacts, selectFilters],
-  (contacts, { name = '', searchType = 'name' }) => {
-    if (!contacts || contacts.length === 0) return [];
+  (contacts, filters) => {
+    if (!contacts?.length) return [];
 
+    const { name = '', searchType = 'name' } = filters || {};
     const normalizedFilter = name.trim().toLowerCase();
 
     return contacts.filter((contact) => {

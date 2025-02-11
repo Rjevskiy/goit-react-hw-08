@@ -1,5 +1,1 @@
-
-import { changeFilter } from './slice';
-
-export { changeFilter }; 
-
+export const selectNameFilter = (state) => state.filters.name;

@@ -1,15 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { selectIsLoggedIn } from '../../redux/auth/selectors';
 
 const Navigation = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Получаем состояние авторизации
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   return (
-    <nav className='planerLi'>
-      <Link to="/">Home</Link>
-      {isAuthenticated && <Link to="/contacts">Contacts</Link>} {/* Показываем ссылку только если пользователь авторизован */}
-      {isAuthenticated && <Link to="/planer">Planer</Link>} {/* Показываем ссылку только если пользователь авторизован */}
+    <nav className="planerLi">
+      <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
+        Home
+      </NavLink>
+      {isLoggedIn && (
+        <NavLink to="/contacts" className={({ isActive }) => (isActive ? 'active' : '')}>
+          Contacts
+        </NavLink>
+      )}
+      {isLoggedIn && (
+        <NavLink to="/planer" className={({ isActive }) => (isActive ? 'active' : '')}>
+          Planer
+        </NavLink>
+      )}
     </nav>
   );
 };
