@@ -17,38 +17,49 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
+        console.log('registerUser.fulfilled', action.payload); 
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
         localStorage.setItem('token', action.payload.token);
+        state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log('loginUser.fulfilled', action.payload); 
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
         localStorage.setItem('token', action.payload.token);
+        state.error = null;
       })
       .addCase(logoutUser.fulfilled, (state) => {
+        console.log('logoutUser.fulfilled'); 
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
         state.loading = false;
         localStorage.removeItem('token');
+        state.error = null;
       })
       .addCase(fetchUserData.pending, (state) => {
+        console.log('fetchUserData.pending'); 
         state.isRefreshing = true;
+        state.error = null;
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
+        console.log('fetchUserData.fulfilled', action.payload); 
         state.user = action.payload;
         state.isRefreshing = false;
         state.loading = false;
+        state.error = null;
       })
-      .addCase(fetchUserData.rejected, (state) => {
+      .addCase(fetchUserData.rejected, (state, action) => {
+        console.log('fetchUserData.rejected', action.payload || action.error.message); 
         state.isRefreshing = false;
         state.loading = false;
-        state.error = 'Сталася помилка при оновленні даних';
+        state.error = action.payload || action.error.message || 'Помилка при завантаженні даних';
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
@@ -61,7 +72,7 @@ const authSlice = createSlice({
         (action) => action.type.endsWith('/rejected'),
         (state, action) => {
           state.loading = false;
-          state.error = action.payload || 'Сталася помилка';
+          state.error = action.payload || action.error.message || 'Сталася помилка';
         }
       );
   },

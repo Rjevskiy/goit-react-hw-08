@@ -1,32 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { api, setAuthHeader, clearAuthHeader, getToken } from '../auth/operations'; 
 
-const api = axios.create({
-  baseURL: 'https://connections-api.goit.global/',
-});
 
-// Функция для установки заголовка авторизации
-const setAuthHeader = (token) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  }
-};
-
-// Функция для очистки заголовка авторизации
-const clearAuthHeader = () => {
-  delete api.defaults.headers.common['Authorization'];
-};
-
-// Получение токена из localStorage
-export const getToken = () => localStorage.getItem('token');
-
-// Запрос контактов
 export const fetchContacts = createAsyncThunk('contacts/fetchAll', async (_, thunkAPI) => {
   const state = thunkAPI.getState();
   const token = state.auth.token || getToken();
 
   if (!token) {
-    return thunkAPI.rejectWithValue('Нет токена, запрос отклонен');
+    return thunkAPI.rejectWithValue('Немає токена, запит відхилено');
   }
 
   setAuthHeader(token);
@@ -35,17 +16,17 @@ export const fetchContacts = createAsyncThunk('contacts/fetchAll', async (_, thu
     const response = await api.get('contacts');
     return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка загрузки контактов');
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Помилка завантаження контактів');
   }
 });
 
-// Добавление контакта
+
 export const addContact = createAsyncThunk('contacts/addContact', async (contact, thunkAPI) => {
   const state = thunkAPI.getState();
   const token = state.auth.token || getToken();
 
   if (!token) {
-    return thunkAPI.rejectWithValue('Нет токена, запрос отклонен');
+    return thunkAPI.rejectWithValue('Немає токена, запит відхилено');
   }
 
   setAuthHeader(token);
@@ -54,17 +35,17 @@ export const addContact = createAsyncThunk('contacts/addContact', async (contact
     const response = await api.post('contacts', contact);
     return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка добавления контакта');
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Помилка додавання контакту');
   }
 });
 
-// Удаление контакта
+
 export const deleteContact = createAsyncThunk('contacts/deleteContact', async (contactId, thunkAPI) => {
   const state = thunkAPI.getState();
   const token = state.auth.token || getToken();
 
   if (!token) {
-    return thunkAPI.rejectWithValue('Нет токена, запрос отклонен');
+    return thunkAPI.rejectWithValue('Немає токена, запит відхилено');
   }
 
   setAuthHeader(token);
@@ -73,6 +54,6 @@ export const deleteContact = createAsyncThunk('contacts/deleteContact', async (c
     await api.delete(`contacts/${contactId}`);
     return contactId;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка удаления контакта');
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Помилка видалення контакту');
   }
 });

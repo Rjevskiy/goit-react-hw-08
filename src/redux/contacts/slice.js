@@ -61,7 +61,7 @@ const slice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.items = [];
         state.loading = false;
-        state.error = null; // Очистка состояния при выходе пользователя
+        state.error = null; 
       });
   },
 });

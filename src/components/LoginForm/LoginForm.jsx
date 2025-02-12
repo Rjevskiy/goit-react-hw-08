@@ -11,19 +11,20 @@ const LoginForm = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
     if (!credentials.email || !credentials.password) {
       setError('Both fields are required');
       return;
     }
 
-    
-    dispatch(loginUser(credentials))
-      .unwrap()
-      .catch((err) => setError(err.message || 'Error during login'));
+    try {
+      await dispatch(loginUser(credentials)).unwrap();
+      setError(''); 
+    } catch (err) {
+      setError(err?.message || 'Error during login'); 
+    }
   };
 
   return (

@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContacts } from "../redux/contacts/operations";
 import ContactForm from "../components/ContactForm/ContactForm";
 import ContactList from "../components/ContactList/ContactList";
+import SearchBox from "../components/SearchBox/SearchBox";  
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.contacts);
-  const { isAuthenticated } = useSelector((state) => state.auth); // Получаем статус аутентификации
-  const [hasFetched, setHasFetched] = useState(false); // Для контроля запросов
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); 
 
+  // Викликаємо fetchContacts, якщо користувач автентифікований та контакти ще не завантажені
   useEffect(() => {
-    if (isAuthenticated && items.length === 0 && !hasFetched) { // Проверка на авторизацию);
-      setHasFetched(true); // Запрос был сделан
+    if (isAuthenticated && !loading && !items.length) {
+      dispatch(fetchContacts()); // Відправляємо запит на отримання контактів
     }
-  }, [dispatch, items.length, hasFetched, isAuthenticated]); // Добавили зависимость от isAuthenticated
+  }, [dispatch, isAuthenticated, loading, items.length]); // Додано залежності для правильного спрацьовування
 
   return (
     <div>
       <h1>Контакти</h1>
-      {loading && <p>Завантаження...</p>}
-      {error && <p style={{ color: 'red' }}>Сталася помилка: {error}</p>}
       <ContactForm />
-      <ContactList />
+      <SearchBox /> {/* Пошуковий бокс додано правильно */}
+      {loading && <p>Загрузка...</p>}
+      {error && <p>Ошибка: {error}</p>}
+      <ContactList contacts={items} /> {/* Відображення списку контактів */}
     </div>
   );
 };

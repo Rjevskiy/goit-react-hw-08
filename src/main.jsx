@@ -1,14 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom/client'; // Новый импорт для React 18
+import { store, persistor } from './redux/store'; // Импортируем store и persistor
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { store } from './redux/store';
-import App from './App';
+import { PersistGate } from 'redux-persist/integration/react'; // Для загрузки persisted состояния
+import App from './App'; // Импорт компонента App
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+// Создаём корневой элемент с помощью createRoot
+const root = ReactDOM.createRoot(document.getElementById('root')); 
+
+// Рендерим приложение с Redux Provider и PersistGate
+root.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <PersistGate loading={<div>Загрузка...</div>} persistor={persistor}>
       <App />
-    </BrowserRouter>
+    </PersistGate>
   </Provider>
 );

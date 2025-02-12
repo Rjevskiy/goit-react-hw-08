@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from './redux/auth/operations'; 
+import { logoutUser } from '../../redux/auth/operations';  // Исправленный импорт
 import { useNavigate } from 'react-router-dom'; 
 
 const Logout = () => {
