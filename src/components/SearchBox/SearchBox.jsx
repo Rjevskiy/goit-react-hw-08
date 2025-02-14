@@ -4,8 +4,8 @@ import { changeFilter } from '../../redux/filters/slice';
 import './SearchBox.css';
 
 const SearchBox = () => {
-  const filter = useSelector((state) => state.filters.name); 
-  const searchType = useSelector((state) => state.filters.searchType); 
+  const filter = useSelector((state) => state.filters?.name || ""); 
+  const searchType = useSelector((state) => state.filters?.searchType || "name"); 
   const dispatch = useDispatch();
 
   const handleFilterChange = (e) => {
@@ -52,9 +52,3 @@ const SearchBox = () => {
 };
 
 export default SearchBox;
-
-
-
-
-
-

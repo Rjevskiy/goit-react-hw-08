@@ -2,15 +2,14 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const RestrictedRoute = ({ children }) => {
+const RestrictedRoute = ({ component: Component, redirectTo = '/contacts' }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  
   if (isAuthenticated) {
-    return <Navigate to="/contacts" />;
+    return <Navigate to={redirectTo} replace />;
   }
 
-  return children; 
+  return <Component />;
 };
 
 export default RestrictedRoute;

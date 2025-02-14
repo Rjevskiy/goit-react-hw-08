@@ -9,13 +9,14 @@ const ContactsPage = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.contacts);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); 
+  const isLoginSuccessful = useSelector((state) => state.auth.isLoginSuccessful); // Для отслеживания успешного входа
 
-  // Викликаємо fetchContacts, якщо користувач автентифікований та контакти ще не завантажені
+  // Викликаємо fetchContacts, якщо користувач автентифікований, логін пройшов успішно і контакти ще не завантажені
   useEffect(() => {
-    if (isAuthenticated && !loading && !items.length) {
+    if (isAuthenticated && isLoginSuccessful && !loading && items.length === 0) {
       dispatch(fetchContacts()); // Відправляємо запит на отримання контактів
     }
-  }, [dispatch, isAuthenticated, loading, items.length]); // Додано залежності для правильного спрацьовування
+  }, [dispatch, isAuthenticated, isLoginSuccessful, loading, items.length]);
 
   return (
     <div>

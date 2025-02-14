@@ -8,37 +8,58 @@ export const api = axios.create({
   },
 });
 
-
+// Устанавливаем токен в заголовок
 export const setAuthHeader = (token) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  }
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
-
+// Удаляем токен из заголовков
 export const clearAuthHeader = () => {
   delete api.defaults.headers.common['Authorization'];
 };
 
-
+// Получаем токен из localStorage
 export const getToken = () => localStorage.getItem('token');
 
-
-export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, thunkAPI) => {
-  const token = getToken();
-
-  if (!token) {
-    return thunkAPI.rejectWithValue('Нет токена, запрос отклонен');
+// Регистрация
+export const registerUser = createAsyncThunk('auth/register', async (userData, thunkAPI) => {
+  try {
+    const response = await api.post('/users/signup', userData);
+    const { token } = response.data;
+    localStorage.setItem('token', token); // Сохраняем токен
+    setAuthHeader(token);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при регистрации');
   }
-
-  clearAuthHeader();
-  localStorage.removeItem('token');
-
-  return { message: 'Выход выполнен успешно' };
 });
 
+// Логин
+export const loginUser = createAsyncThunk('auth/login', async (userData, thunkAPI) => {
+  try {
+    const response = await api.post('/users/login', userData);
+    const { token } = response.data;
+    localStorage.setItem('token', token); // Сохраняем токен
+    setAuthHeader(token);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при входе');
+  }
+});
 
-export const fetchUserData = createAsyncThunk('auth/fetchUserData', async (_, thunkAPI) => {
+// Логаут
+export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+  try {
+    await api.post('/users/logout');
+    clearAuthHeader();
+    localStorage.removeItem('token');
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при выходе');
+  }
+});
+
+// Обновление данных пользователя (refresh)
+export const refreshUser = createAsyncThunk('auth/refreshUser', async (_, thunkAPI) => {
   const token = getToken();
 
   if (!token) {
@@ -48,29 +69,9 @@ export const fetchUserData = createAsyncThunk('auth/fetchUserData', async (_, th
   setAuthHeader(token);
 
   try {
-    const response = await api.get('/users/current');
+    const response = await api.get('/users/current'); // Запрос GET
     return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при загрузке данных пользователя');
-  }
-});
-
-
-export const loginUser = createAsyncThunk('auth/loginUser', async (userData, thunkAPI) => {
-  try {
-    const response = await api.post('/users/login', userData);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при входе');
-  }
-});
-
-
-export const registerUser = createAsyncThunk('auth/registerUser', async (userData, thunkAPI) => {
-  try {
-    const response = await api.post('/users/signup', userData);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при регистрации');
+    return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при обновлении пользователя');
   }
 });

@@ -1,33 +1,36 @@
-
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; 
-import rootReducer from './rootReducer'; 
+import storage from 'redux-persist/lib/storage';
+import authReducer from './auth/slice'; // Проверка: существует ли файл authSlice.js?
+import contactsReducer from './contacts/slice'; // Проверка: правильный путь к редьюсеру
 
-
-const persistConfig = {
-  key: 'root', 
-  storage,     
-  whitelist: ['contacts', 'auth'], 
+// Конфигурация для auth
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['token'], // Сохраняем только token
 };
 
+// Оборачиваем authReducer в persistReducer
+const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-
+// Создаём store
 const store = configureStore({
-  reducer: persistedReducer,
-  devTools: process.env.NODE_ENV !== 'production', 
+  reducer: {
+    auth: persistedAuthReducer, // Используем persistedAuthReducer
+    contacts: contactsReducer,  // contactsReducer без persist
+  },
+  devTools: process.env.NODE_ENV !== 'production', // Включение devTools
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'], 
-        ignoredPaths: ['auth.token'], 
+        ignoredActions: ['persist/PERSIST'], // Игнорируем действия persist
       },
     }),
 });
 
-
+// Создаём persistor
 const persistor = persistStore(store);
 
-export { store, persistor }; 
+// Экспортируем store и persistor
+export { store, persistor };

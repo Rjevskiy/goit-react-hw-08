@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { api, setAuthHeader, clearAuthHeader, getToken } from '../auth/operations'; 
-
+import { api, setAuthHeader, getToken } from '../auth/operations'; 
 
 export const fetchContacts = createAsyncThunk('contacts/fetchAll', async (_, thunkAPI) => {
   const state = thunkAPI.getState();
@@ -20,7 +19,6 @@ export const fetchContacts = createAsyncThunk('contacts/fetchAll', async (_, thu
   }
 });
 
-
 export const addContact = createAsyncThunk('contacts/addContact', async (contact, thunkAPI) => {
   const state = thunkAPI.getState();
   const token = state.auth.token || getToken();
@@ -38,7 +36,6 @@ export const addContact = createAsyncThunk('contacts/addContact', async (contact
     return thunkAPI.rejectWithValue(error.response?.data?.message || 'Помилка додавання контакту');
   }
 });
-
 
 export const deleteContact = createAsyncThunk('contacts/deleteContact', async (contactId, thunkAPI) => {
   const state = thunkAPI.getState();

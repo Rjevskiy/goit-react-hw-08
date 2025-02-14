@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Импорт Router
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
 import Layout from './components/Layout/Layout';
 import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
@@ -8,7 +8,7 @@ import ContactsPage from './pages/ContactsPage';
 import PlanerPage from './pages/Planer';
 import PrivateRoute from './components/Routes/PrivateRoute';
 import RestrictedRoute from './components/Routes/RestrictedRoute';
-import { fetchUserData } from './redux/auth/operations';
+import { refreshUser } from './redux/auth/operations';  // Исправлено на refreshUser
 import './App.css';
 import { getToken } from './redux/auth/operations';
 
@@ -21,10 +21,9 @@ const App = () => {
   useEffect(() => {
     const token = getToken();
     if (token && !user && !isRefreshing) {
-      // Якщо є токен, користувач не завантажений і не відбувається оновлення
-      dispatch(fetchUserData()); // Викликаємо dispatch для оновлення даних користувача
+      dispatch(refreshUser());  // Заменено на refreshUser
     }
-  }, [dispatch, user, isRefreshing]); // Завжди перевіряємо на оновлення користувача та токен
+  }, [dispatch, user, isRefreshing]);
 
   useEffect(() => {
     console.log('isAuthenticated:', isAuthenticated);
@@ -36,44 +35,27 @@ const App = () => {
 
   return (
     <Router>
-      <div className="app">
-        <Layout />
+      <Layout> {/* Ранее здесь был просто div, теперь Layout оборачивает Routes */}
         <Routes>
           <Route path="/" element={<h2>Головна сторінка</h2>} />
           <Route
             path="/register"
-            element={
-              <RestrictedRoute>
-                <RegistrationPage />
-              </RestrictedRoute>
-            }
+            element={<RestrictedRoute component={RegistrationPage} />}
           />
           <Route
             path="/login"
-            element={
-              <RestrictedRoute>
-                <LoginPage />
-              </RestrictedRoute>
-            }
+            element={<RestrictedRoute component={LoginPage} />}
           />
           <Route
             path="/contacts"
-            element={
-              <PrivateRoute>
-                <ContactsPage />
-              </PrivateRoute>
-            }
+            element={<PrivateRoute component={ContactsPage} />}
           />
           <Route
             path="/planer"
-            element={
-              <PrivateRoute>
-                <PlanerPage />
-              </PrivateRoute>
-            }
+            element={<PrivateRoute component={PlanerPage} />}
           />
         </Routes>
-      </div>
+      </Layout>
     </Router>
   );
 };
