@@ -15,7 +15,8 @@ const LoginForm = () => {
     e.preventDefault();
 
     if (!credentials.email || !credentials.password) {
-      setError('Обидва поля є обов'язковими для заповнення');
+      setError('Обидва поля є обов\'язковими для заповнення');
+
       return;
     }
 
