@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, loginUser, logoutUser, refreshUser } from './operations'; // Используем refreshUser
+import { registerUser, loginUser, logoutUser, refreshUser } from './operations';
 
 const initialState = {
-  user: null,
-  token: localStorage.getItem('token') || null,
-  isAuthenticated: Boolean(localStorage.getItem('token')),
-  loading: false,
+  user: { name: null, email: null }, 
+  token: null, 
+  isAuthenticated: false, 
   isRefreshing: false,
+  loading: false,
   error: null,
 };
 
@@ -17,51 +17,43 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
-        console.log('registerUser.fulfilled', action.payload);
         const { user, token } = action.payload;
         state.user = user;
         state.token = token;
         state.isAuthenticated = true;
         state.loading = false;
-        localStorage.setItem('token', token);
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log('loginUser.fulfilled', action.payload);
         const { user, token } = action.payload;
         state.user = user;
         state.token = token;
         state.isAuthenticated = true;
         state.loading = false;
-        localStorage.setItem('token', token);
         state.error = null;
       })
       .addCase(logoutUser.fulfilled, (state) => {
-        console.log('logoutUser.fulfilled');
-        state.user = null;
+        state.user = { name: null, email: null };
         state.token = null;
         state.isAuthenticated = false;
         state.loading = false;
-        localStorage.removeItem('token');
         state.error = null;
       })
-      .addCase(refreshUser.pending, (state) => {  // Используем refreshUser
-        console.log('refreshUser.pending');
+      .addCase(refreshUser.pending, (state) => {
         state.isRefreshing = true;
         state.error = null;
       })
-      .addCase(refreshUser.fulfilled, (state, action) => {  // Используем refreshUser
-        console.log('refreshUser.fulfilled', action.payload);
+      .addCase(refreshUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isAuthenticated = true;
         state.isRefreshing = false;
-        state.loading = false;
         state.error = null;
       })
-      .addCase(refreshUser.rejected, (state, action) => {  // Используем refreshUser
-        console.log('refreshUser.rejected', action.payload || action.error.message);
+      .addCase(refreshUser.rejected, (state, action) => {
         state.isRefreshing = false;
-        state.loading = false;
-        state.error = action.payload || action.error.message || 'Помилка при завантаженні даних';
+        state.isAuthenticated = false;
+        state.token = null; 
+        state.error = action.payload || action.error.message || 'Ошибка обновления пользователя';
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
@@ -74,7 +66,7 @@ const authSlice = createSlice({
         (action) => action.type.endsWith('/rejected'),
         (state, action) => {
           state.loading = false;
-          state.error = action.payload || action.error.message || 'Сталася помилка';
+          state.error = action.payload || action.error.message || 'Произошла ошибка';
         }
       );
   },

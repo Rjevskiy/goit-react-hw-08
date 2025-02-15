@@ -8,7 +8,7 @@ import ContactsPage from './pages/ContactsPage';
 import PlanerPage from './pages/Planer';
 import PrivateRoute from './components/Routes/PrivateRoute';
 import RestrictedRoute from './components/Routes/RestrictedRoute';
-import { refreshUser } from './redux/auth/operations';  // Исправлено на refreshUser
+import { refreshUser } from './redux/auth/operations';  
 import './App.css';
 import { getToken } from './redux/auth/operations';
 
@@ -21,7 +21,7 @@ const App = () => {
   useEffect(() => {
     const token = getToken();
     if (token && !user && !isRefreshing) {
-      dispatch(refreshUser());  // Заменено на refreshUser
+      dispatch(refreshUser());
     }
   }, [dispatch, user, isRefreshing]);
 
@@ -35,24 +35,24 @@ const App = () => {
 
   return (
     <Router>
-      <Layout> {/* Ранее здесь был просто div, теперь Layout оборачивает Routes */}
+      <Layout>
         <Routes>
           <Route path="/" element={<h2>Головна сторінка</h2>} />
           <Route
             path="/register"
-            element={<RestrictedRoute component={RegistrationPage} />}
+            element={<RestrictedRoute element={<RegistrationPage />} />}
           />
           <Route
             path="/login"
-            element={<RestrictedRoute component={LoginPage} />}
+            element={<RestrictedRoute element={<LoginPage />} />}
           />
           <Route
             path="/contacts"
-            element={<PrivateRoute component={ContactsPage} />}
+            element={<PrivateRoute element={<ContactsPage />} />}
           />
           <Route
             path="/planer"
-            element={<PrivateRoute component={PlanerPage} />}
+            element={<PrivateRoute element={<PlanerPage />} />}
           />
         </Routes>
       </Layout>

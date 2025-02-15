@@ -9,12 +9,12 @@ const ContactsPage = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.contacts);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); 
-  const isLoginSuccessful = useSelector((state) => state.auth.isLoginSuccessful); // Для отслеживания успешного входа
+  const isLoginSuccessful = useSelector((state) => state.auth.isLoginSuccessful); 
 
-  // Викликаємо fetchContacts, якщо користувач автентифікований, логін пройшов успішно і контакти ще не завантажені
+  
   useEffect(() => {
     if (isAuthenticated && isLoginSuccessful && !loading && items.length === 0) {
-      dispatch(fetchContacts()); // Відправляємо запит на отримання контактів
+      dispatch(fetchContacts()); 
     }
   }, [dispatch, isAuthenticated, isLoginSuccessful, loading, items.length]);
 
@@ -22,10 +22,10 @@ const ContactsPage = () => {
     <div>
       <h1>Контакти</h1>
       <ContactForm />
-      <SearchBox /> {/* Пошуковий бокс додано правильно */}
+      <SearchBox /> 
       {loading && <p>Загрузка...</p>}
       {error && <p>Ошибка: {error}</p>}
-      <ContactList contacts={items} /> {/* Відображення списку контактів */}
+      <ContactList contacts={items} /> 
     </div>
   );
 };

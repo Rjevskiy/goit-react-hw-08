@@ -8,17 +8,17 @@ export const api = axios.create({
   },
 });
 
-// Устанавливаем токен в заголовок
+
 export const setAuthHeader = (token) => {
   api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
-// Удаляем токен из заголовков
+
 export const clearAuthHeader = () => {
   delete api.defaults.headers.common['Authorization'];
 };
 
-// Получаем токен из localStorage
+
 export const getToken = () => localStorage.getItem('token');
 
 // Регистрация
@@ -26,7 +26,7 @@ export const registerUser = createAsyncThunk('auth/register', async (userData, t
   try {
     const response = await api.post('/users/signup', userData);
     const { token } = response.data;
-    localStorage.setItem('token', token); // Сохраняем токен
+    localStorage.setItem('token', token); 
     setAuthHeader(token);
     return response.data;
   } catch (error) {
@@ -39,7 +39,7 @@ export const loginUser = createAsyncThunk('auth/login', async (userData, thunkAP
   try {
     const response = await api.post('/users/login', userData);
     const { token } = response.data;
-    localStorage.setItem('token', token); // Сохраняем токен
+    localStorage.setItem('token', token); 
     setAuthHeader(token);
     return response.data;
   } catch (error) {
@@ -58,18 +58,12 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
   }
 });
 
-// Обновление данных пользователя (refresh)
+
 export const refreshUser = createAsyncThunk('auth/refreshUser', async (_, thunkAPI) => {
-  const token = getToken();
-
-  if (!token) {
-    return thunkAPI.rejectWithValue('Нет токена, запрос отклонен');
-  }
-
-  setAuthHeader(token);
-
   try {
-    const response = await api.get('/users/current'); // Запрос GET
+    setAuthHeader(getToken()); 
+
+    const response = await api.get('/users/current');
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при обновлении пользователя');

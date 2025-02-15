@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../redux/auth/operations';
-import { refreshUser } from '../../redux/auth/operations'; // Заменили на refreshUser
+import { refreshUser } from '../../redux/auth/operations'; 
 
 const UserMenu = () => {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ const UserMenu = () => {
 
   useEffect(() => {
     if (isAuthenticated && !user) {
-      dispatch(refreshUser()); // Заменили на refreshUser
+      dispatch(refreshUser()); 
     }
   }, [isAuthenticated, dispatch, user]);
 
