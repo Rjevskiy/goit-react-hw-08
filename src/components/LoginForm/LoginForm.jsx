@@ -15,7 +15,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     if (!credentials.email || !credentials.password) {
-      setError('Both fields are required');
+      setError('Обидва поля є обов'язковими для заповнення');
       return;
     }
 
@@ -23,7 +23,7 @@ const LoginForm = () => {
       await dispatch(loginUser(credentials)).unwrap();
       setError(''); 
     } catch (err) {
-      setError(err?.message || 'Error during login'); 
+      setError(err?.message || 'Помилка під час входу в систему'); 
     }
   };
 
