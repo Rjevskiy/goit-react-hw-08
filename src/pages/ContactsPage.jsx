@@ -9,14 +9,13 @@ const ContactsPage = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.contacts);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); 
-  const isLoginSuccessful = useSelector((state) => state.auth.isLoginSuccessful); 
 
-  
+  // Запрашиваем контакты только если они еще не загружены и если пользователь аутентифицирован
   useEffect(() => {
-    if (isAuthenticated && isLoginSuccessful && !loading && items.length === 0) {
-      dispatch(fetchContacts()); 
+    if (isAuthenticated && !items.length) {
+      dispatch(fetchContacts());
     }
-  }, [dispatch, isAuthenticated, isLoginSuccessful, loading, items.length]);
+  }, [dispatch, isAuthenticated, items.length]); // зависит только от isAuthenticated и items.length
 
   return (
     <div>

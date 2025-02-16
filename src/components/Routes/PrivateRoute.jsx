@@ -5,13 +5,11 @@ import { useSelector } from 'react-redux';
 const PrivateRoute = ({ element: Component, redirectTo = '/' }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  
   if (!isAuthenticated) {
     return <Navigate to={redirectTo} replace />;
   }
 
-  
-  return Component;
+  return <Component />;  {/* Мы рендерим переданный компонент */}
 };
 
 export default PrivateRoute;

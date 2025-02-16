@@ -22,7 +22,7 @@ const ContactForm = () => {
   const dispatch = useDispatch();
   const contacts = useSelector((state) => state.contacts.items);
 
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleSubmit = async (values, { resetForm, setSubmitting }) => {
     const newContact = { id: nanoid(), ...values };
 
     const isDuplicate = contacts.some(
@@ -33,6 +33,7 @@ const ContactForm = () => {
 
     if (isDuplicate) {
       alert("Контакт з таким іменем або номером вже існує!");
+      setSubmitting(false);  // Останавливаем индикатор загрузки
       return;
     }
 
@@ -41,6 +42,8 @@ const ContactForm = () => {
       resetForm();
     } catch (error) {
       console.error("Помилка при додаванні контакту:", error);
+    } finally {
+      setSubmitting(false);  // Останавливаем индикатор загрузки
     }
   };
 
@@ -50,21 +53,25 @@ const ContactForm = () => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      <Form className="contact-form">
-        <div>
-          <label htmlFor="name">Ім'я</label>
-          <Field id="name" name="name" placeholder="Введіть ім'я" autoComplete="off" />
-          <ErrorMessage name="name" component="div" className="error" />
-        </div>
+      {({ isSubmitting }) => (
+        <Form className="contact-form">
+          <div>
+            <label htmlFor="name">Ім'я</label>
+            <Field id="name" name="name" placeholder="Введіть ім'я" autoComplete="off" />
+            <ErrorMessage name="name" component="div" className="error" />
+          </div>
 
-        <div>
-          <label htmlFor="number">Номер</label>
-          <Field id="number" name="number" placeholder="Введіть номер" autoComplete="off" />
-          <ErrorMessage name="number" component="div" className="error" />
-        </div>
+          <div>
+            <label htmlFor="number">Номер</label>
+            <Field id="number" name="number" placeholder="Введіть номер" autoComplete="off" />
+            <ErrorMessage name="number" component="div" className="error" />
+          </div>
 
-        <button type="submit">Додати контакт</button>
-      </Form>
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Завантаження..." : "Додати контакт"}
+          </button>
+        </Form>
+      )}
     </Formik>
   );
 };

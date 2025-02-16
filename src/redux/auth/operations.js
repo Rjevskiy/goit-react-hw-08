@@ -2,22 +2,21 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const api = axios.create({
-  baseURL: 'https://connections-api.goit.global/',
+  baseURL: 'https://connections-api.goit.global/',  // Убедитесь, что это правильный URL для вашего API
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-
 export const setAuthHeader = (token) => {
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  if (token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
 };
-
 
 export const clearAuthHeader = () => {
   delete api.defaults.headers.common['Authorization'];
 };
-
 
 export const getToken = () => localStorage.getItem('token');
 
@@ -26,8 +25,10 @@ export const registerUser = createAsyncThunk('auth/register', async (userData, t
   try {
     const response = await api.post('/users/signup', userData);
     const { token } = response.data;
-    localStorage.setItem('token', token); 
-    setAuthHeader(token);
+    if (token) {
+      localStorage.setItem('token', token); 
+      setAuthHeader(token);
+    }
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при регистрации');
@@ -39,8 +40,10 @@ export const loginUser = createAsyncThunk('auth/login', async (userData, thunkAP
   try {
     const response = await api.post('/users/login', userData);
     const { token } = response.data;
-    localStorage.setItem('token', token); 
-    setAuthHeader(token);
+    if (token) {
+      localStorage.setItem('token', token); 
+      setAuthHeader(token);
+    }
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка при входе');
@@ -58,10 +61,15 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
   }
 });
 
-
+// Обновление пользователя (проверка токена и обработка ошибки)
 export const refreshUser = createAsyncThunk('auth/refreshUser', async (_, thunkAPI) => {
   try {
-    setAuthHeader(getToken()); 
+    const token = getToken();  // Проверяем токен в localStorage
+    if (!token) {
+      return thunkAPI.rejectWithValue('Нет токена для обновления пользователя');  // Если токен отсутствует, возвращаем ошибку
+    }
+
+    setAuthHeader(token);  // Устанавливаем токен в заголовки
 
     const response = await api.get('/users/current');
     return response.data;

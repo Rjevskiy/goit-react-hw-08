@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { registerUser, loginUser, logoutUser, refreshUser } from './operations';
 
 const initialState = {
-  user: { name: null, email: null }, 
-  token: null, 
-  isAuthenticated: false, 
+  user: { name: null, email: null },
+  token: null,
+  isAuthenticated: false,
   isRefreshing: false,
   loading: false,
   error: null,
@@ -52,7 +52,7 @@ const authSlice = createSlice({
       .addCase(refreshUser.rejected, (state, action) => {
         state.isRefreshing = false;
         state.isAuthenticated = false;
-        state.token = null; 
+        state.token = null;
         state.error = action.payload || action.error.message || 'Ошибка обновления пользователя';
       })
       .addMatcher(

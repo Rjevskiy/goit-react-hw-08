@@ -10,24 +10,14 @@ import PrivateRoute from './components/Routes/PrivateRoute';
 import RestrictedRoute from './components/Routes/RestrictedRoute';
 import { refreshUser } from './redux/auth/operations';  
 import './App.css';
-import { getToken } from './redux/auth/operations';
 
 const App = () => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isRefreshing = useSelector((state) => state.auth.isRefreshing);
-  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    const token = getToken();
-    if (token && !user && !isRefreshing) {
-      dispatch(refreshUser());
-    }
-  }, [dispatch, user, isRefreshing]);
-
-  useEffect(() => {
-    console.log('isAuthenticated:', isAuthenticated);
-  }, [isAuthenticated]);
+    dispatch(refreshUser());
+  }, [dispatch]);
 
   if (isRefreshing) {
     return <div>Завантаження...</div>;
@@ -40,19 +30,19 @@ const App = () => {
           <Route path="/" element={<h2>Головна сторінка</h2>} />
           <Route
             path="/register"
-            element={<RestrictedRoute element={<RegistrationPage />} />}
+            element={<RestrictedRoute element={RegistrationPage} />}  // Теперь это JSX-элемент
           />
           <Route
             path="/login"
-            element={<RestrictedRoute element={<LoginPage />} />}
+            element={<RestrictedRoute element={LoginPage} />}  // Теперь это JSX-элемент
           />
           <Route
             path="/contacts"
-            element={<PrivateRoute element={<ContactsPage />} />}
+            element={<PrivateRoute element={ContactsPage} />}  // Теперь это JSX-элемент
           />
           <Route
             path="/planer"
-            element={<PrivateRoute element={<PlanerPage />} />}
+            element={<PrivateRoute element={PlanerPage} />}  // Теперь это JSX-элемент
           />
         </Routes>
       </Layout>
