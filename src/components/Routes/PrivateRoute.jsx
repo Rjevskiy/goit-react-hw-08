@@ -9,7 +9,7 @@ const PrivateRoute = ({ element: Component, redirectTo = '/' }) => {
     return <Navigate to={redirectTo} replace />;
   }
 
-  return <Component />;  {/* Мы рендерим переданный компонент */}
+  return <Component />;  
 };
 
 export default PrivateRoute;

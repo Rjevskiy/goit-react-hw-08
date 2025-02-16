@@ -1,13 +1,13 @@
 import React from 'react';
-import LoginForm from '../components/LoginForm/LoginForm'; // предполагается, что у вас есть LoginForm компонент
+import LoginForm from '../components/LoginForm/LoginForm'; 
 
 const LoginPage = () => {
   return (
     <div>
       <h1>Login Page</h1>
-      <LoginForm /> {/* Вставляем компонент LoginForm */}
+      <LoginForm /> 
     </div>
   );
 };
 
-export default LoginPage; // экспортируем компонент LoginPage
+export default LoginPage; 

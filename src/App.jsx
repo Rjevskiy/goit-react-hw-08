@@ -30,19 +30,19 @@ const App = () => {
           <Route path="/" element={<h2>Головна сторінка</h2>} />
           <Route
             path="/register"
-            element={<RestrictedRoute element={RegistrationPage} />}  // Теперь это JSX-элемент
+            element={<RestrictedRoute element={RegistrationPage} />}  
           />
           <Route
             path="/login"
-            element={<RestrictedRoute element={LoginPage} />}  // Теперь это JSX-элемент
+            element={<RestrictedRoute element={LoginPage} />}  
           />
           <Route
             path="/contacts"
-            element={<PrivateRoute element={ContactsPage} />}  // Теперь это JSX-элемент
+            element={<PrivateRoute element={ContactsPage} />}  
           />
           <Route
             path="/planer"
-            element={<PrivateRoute element={PlanerPage} />}  // Теперь это JSX-элемент
+            element={<PrivateRoute element={PlanerPage} />}  
           />
         </Routes>
       </Layout>

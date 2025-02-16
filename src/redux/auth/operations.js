@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const api = axios.create({
-  baseURL: 'https://connections-api.goit.global/',  // Убедитесь, что это правильный URL для вашего API
+  baseURL: 'https://connections-api.goit.global/',  
   headers: {
     'Content-Type': 'application/json',
   },
@@ -61,15 +61,15 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
   }
 });
 
-// Обновление пользователя (проверка токена и обработка ошибки)
+
 export const refreshUser = createAsyncThunk('auth/refreshUser', async (_, thunkAPI) => {
   try {
-    const token = getToken();  // Проверяем токен в localStorage
+    const token = getToken();  
     if (!token) {
-      return thunkAPI.rejectWithValue('Нет токена для обновления пользователя');  // Если токен отсутствует, возвращаем ошибку
+      return thunkAPI.rejectWithValue('Нет токена для обновления пользователя');  
     }
 
-    setAuthHeader(token);  // Устанавливаем токен в заголовки
+    setAuthHeader(token);  
 
     const response = await api.get('/users/current');
     return response.data;

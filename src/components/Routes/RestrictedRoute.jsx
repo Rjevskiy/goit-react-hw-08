@@ -9,7 +9,7 @@ const RestrictedRoute = ({ element: Component, redirectTo = '/contacts' }) => {
     return <Navigate to={redirectTo} replace />;
   }
 
-  return <Component />;  {/* Мы рендерим переданный компонент */}
+  return <Component />;  
 };
 
 export default RestrictedRoute;

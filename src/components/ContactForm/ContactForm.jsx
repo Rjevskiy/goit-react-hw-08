@@ -33,7 +33,7 @@ const ContactForm = () => {
 
     if (isDuplicate) {
       alert("Контакт з таким іменем або номером вже існує!");
-      setSubmitting(false);  // Останавливаем индикатор загрузки
+      setSubmitting(false);  
       return;
     }
 
@@ -43,7 +43,7 @@ const ContactForm = () => {
     } catch (error) {
       console.error("Помилка при додаванні контакту:", error);
     } finally {
-      setSubmitting(false);  // Останавливаем индикатор загрузки
+      setSubmitting(false);  
     }
   };
 
